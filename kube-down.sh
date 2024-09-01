@@ -8,7 +8,7 @@ set -eo pipefail
 
 CLUSTER_NAME='devocean-agent-eks'
 
-ROLE_ARN=$(aws lambda get-function --function-name devocean-agent-eks-executor --region us-east-1 --query "Configuration.Role" --output text) 
+ROLE_ARN=$(aws lambda get-function --function-name devocean-agent-eks-executor --region $AWS_REGION --query "Configuration.Role" --output text)
 
 RBAC_OBJECT='kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -56,7 +56,7 @@ echo
 while true; do
     read -p "Do you want to delete the aws-auth configmap entry? (y/n)" response
     case $response in
-        [Yy]* ) eksctl delete iamidentitymapping --cluster $CLUSTER_NAME --region=us-east-1 --arn $ROLE_ARN --all; break;;
+        [Yy]* ) eksctl delete iamidentitymapping --cluster $CLUSTER_NAME --region $AWS_REGION --arn $ROLE_ARN --all; break;;
         [Nn]* ) break;;
         * ) echo "Response must start with y or n.";;
     esac
