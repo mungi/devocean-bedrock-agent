@@ -21,11 +21,11 @@ AWS_ACCOUNT=$(aws sts get-caller-identity --query "Account" --output text)
 BUCKET_NAME=devocean-bedrock-agent-lambda-artifacts-${AWS_ACCOUNT}
 
 if ! aws s3api head-bucket --bucket $BUCKET_NAME > /dev/null 2>&1; then
-    aws s3 mb s3://${BUCKET_NAME} --region us-east-1
+    aws s3 mb s3://${BUCKET_NAME} --region$AWS_REGION
 fi 
 
 aws cloudformation package \
  --template-file devocean-bedrock-agents-for-eks-tpl.yaml \
  --s3-bucket $BUCKET_NAME \
  --output-template-file devocean-bedrock-agents-for-eks-cfn.yaml \
- --region us-east-1
+ --region $AWS_REGION
