@@ -395,7 +395,7 @@ Resources:
               S3BucketName: 
                 Fn::Join:
                   - ""
-                  - - "devocean-agent-openapi-schema-"
+                  - - "devocean-bedrock-agent-openapi-schema-"
                     - Ref: AWS::AccountId
               S3ObjectKey: open-api-schema.json
       KnowledgeBases:
