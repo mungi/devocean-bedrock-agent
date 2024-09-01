@@ -1,0 +1,18 @@
+
+# Kubernetes Documentation: 
+git clone --depth 1 https://github.com/kubernetes/website website
+cp -r website/content/en data_sources/kubernetes_docs
+rm -rf website
+
+# Amazon EKS Best Practices:
+git clone --depth 1 https://github.com/aws/aws-eks-best-practices.git
+cp -r aws-eks-best-practices data_sources/eks_best_practices
+rm -rf aws-eks-best-practices
+
+# Amazon EKS PDF Documents: 
+curl https://docs.aws.amazon.com/pdfs/eks/latest/userguide/eks-ug.pdf -o data_sources/eks-user-guide.pdf
+curl https://docs.aws.amazon.com/pdfs/eks/latest/APIReference/eks-api.pdf -o data_sources/eks-api-ref.pdf
+
+# AWS re:Post Knowledge Center
+https://repost.aws/knowledge-center
+
