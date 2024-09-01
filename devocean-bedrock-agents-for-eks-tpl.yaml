@@ -4,7 +4,7 @@ Description: DevOcean - Bedrock Agents for EKS
 Parameters:
   EmbeddingModelARN:
     Type: String
-    Default: arn:aws:bedrock:ap-northeast-1::foundation-model/amazon.titan-embed-text-v1:2:8k
+    Default: arn:aws:bedrock:ap-northeast-1::foundation-model/amazon.titan-embed-text-v1
   FoundationModelName: 
     Type: String
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
