@@ -33,7 +33,7 @@ def on_event(event, context):
   else: 
     responseData = {
         'Status': 'FAILED',
-            'Reason': "잘못된 요청 유형: %s" % request_type,
+        'Reason': "잘못된 요청 유형: %s" % request_type,
         'PhysicalResourceId': physical_id
     }
     cfnresponse.send(event, context, cfnresponse.FAILED, responseData)
@@ -50,28 +50,29 @@ def on_event(event, context):
 def on_create(event, physical_id, region, endpoint, vector_index_name,
               vector_field, text_field, metadata_field):
   props = event["ResourceProperties"]
-    print("%s 속성을 사용하여 새 리소스 생성" % props)
+  print("%s 속성을 사용하여 새 리소스 생성" % props)
 
   index_data(region=region, vector_index_name=vector_index_name, 
              text_field=text_field, metadata_field=metadata_field, 
              vector_field=vector_field, endpoint=endpoint)
 
-    reason = "%s 속성을 사용하여 새 리소스 생성" % props
+  reason = "%s 속성을 사용하여 새 리소스 생성" % props
   return reason
 
 
 def on_update(event, physical_id):
+  # physical_id = event["PhysicalResourceId"]
   props = event["ResourceProperties"]
-    print("리소스 업데이트 %s, 속성: %s" % (physical_id, props))
+  print("리소스 업데이트 %s, 속성: %s" % (physical_id, props))
 
-    reason = "리소스 업데이트 %s, 속성: %s" % (physical_id, props)
+  reason = "리소스 업데이트 %s, 속성: %s" % (physical_id, props)
   return reason
 
 
 def on_delete(event, physical_id):
-    print("리소스 삭제 %s" % physical_id)
+  print("리소스 삭제 %s" % physical_id)
 
-    reason = "리소스 삭제 %s" % physical_id
+  reason = "리소스 삭제 %s" % physical_id
   return reason
 
 
@@ -145,3 +146,4 @@ def index_data(region, vector_index_name, text_field,
     response = client.indices.create(index=vector_index_name, body=body)
     print('\n인덱스 생성:')
     print(response)
+    
