@@ -56,7 +56,7 @@ echo
 while true; do
     read -p "Do you want to delete the aws-auth configmap entry? (y/n)" response
     case $response in
-        [Yy]* ) eksctl delete iamidentitymapping --cluster $CLUSTER_NAME --region=$AWS_REGION --arn $ROLE_ARN --all; break;;
+        [Yy]* ) eksctl delete iamidentitymapping --cluster $CLUSTER_NAME --region $AWS_REGION --arn $ROLE_ARN --all; break;;
         [Nn]* ) break;;
         * ) echo "Response must start with y or n.";;
     esac
