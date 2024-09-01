@@ -45,7 +45,7 @@
 [eksctl](https://eksctl.io/usage/creating-and-managing-clusters/) CLI 도구를 사용하여 새로운 Amazon EKS 클러스터를 배포하기 위해 다음 명령어를 실행합니다:
 
 ```
-eksctl create cluster --name devocean-agent-eks --region us-east-1
+eksctl create cluster --name devocean-agent-eks --region ap-northeast-1
 ```
 [eksctl](https://eksctl.io/usage/creating-and-managing-clusters/) CLI 도구는 기본적으로 `~/.kube/config`에 kubernetes 구성을 자동으로 추가합니다. Amazon EKS 클러스터에 액세스할 수 있는지 확인하려면 다음 kubectl 명령어를 실행합니다:
  ```
@@ -82,8 +82,8 @@ kubectl get clustercompliancereport cis -o yaml
 AWS_ACCOUNT=$(aws sts get-caller-identity --query "Account" --output text)
 ```
 ```
-aws s3 mb s3://eks-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
-  --region us-east-1
+aws s3 mb s3://devocean-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
+  --region ap-northeast-1
 ```
 
 그 다음으로, 필요한 참조 문서를 저장할 로컬 디렉토리를 생성합니다. 이 솔루션은 [Kubernetes Documentation](https://github.com/kubernetes/website/tree/main/content/en), [Amazon EKS Best Practices Guide](https://github.com/aws/aws-eks-best-practices), [Amazon EKS User Guide](https://docs.aws.amazon.com/pdfs/eks/latest/userguide/eks-ug.pdf), [Amazon EKS API Reference](https://docs.aws.amazon.com/pdfs/eks/latest/APIReference/eks-api.pdf)를 데이터 소스로 사용합니다.
@@ -115,8 +115,8 @@ curl https://docs.aws.amazon.com/pdfs/eks/latest/APIReference/eks-api.pdf \
 마지막으로, [aws s3 sync](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html) 명령어를 사용하여 데이터 소스를 대상 Amazon S3 버킷으로 복사합니다. `--exclude`와 `--include` 플래그를 조합하여 지원되지 않는 파일 형식을 제외하도록 필터링합니다.
 
 ```
-aws s3 sync ~/data_sources s3://eks-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
- --region us-east-1 \
+aws s3 sync ~/data_sources s3://devocean-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
+ --region ap-northeast-1 \
  --exclude "*" \
  --include "*.txt" \
  --include "*.md" \
@@ -136,13 +136,13 @@ git clone git@github.com:aws-samples/bedrock-agents-for-eks.gits
 
 ```
 # Create an S3 Bucket 
-aws s3 mb s3://eks-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
- --region us-east-1
+aws s3 mb s3://devocean-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
+ --region ap-northeast-1
   
 cd bedrock-agents-for-eks
 
-aws s3 cp open-api-schema.json s3://eks-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
- --region us-east-1
+aws s3 cp open-api-schema.json s3://devocean-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
+ --region ap-northeast-1
 ```
 
 ## AWS Lambda 함수 아티팩트 준비
@@ -158,10 +158,10 @@ aws s3 cp open-api-schema.json s3://eks-bedrock-agent-openapi-schema-${AWS_ACCOU
 
 ```
 aws cloudformation deploy \
- --template-file packaged-devocean-agents-for-eks-cfn.yaml \
- --stack-name devocean-agents-for-eks-stack \
+ --template-file devocean-agents-for-eks-cfn.yaml \
+ --stack-name devocean-bedrock-agent-for-eks \
  --capabilities CAPABILITY_NAMED_IAM \
- --region us-east-1
+ --region $AWS_REGION
 ```
 
 ## EKS 클러스터 접근 구성
@@ -233,41 +233,41 @@ helm uninstall trivy-operator -n trivy-system
  ```
 eksctl delete cluster \
  --name devocean-agent-eks \
- --region us-east-1
+ --region ap-northeast-1
  ```
 
 AWS CloudFormation 스택을 삭제합니다:
 
  ```
  aws cloudformation delete-stack \
- --stack-name devocean-agents-for-eks-stack \
- --region us-east-1
+ --stack-name devocean-bedrock-agents-for-eks-stack \
+ --region ap-northeast-1
  ```
 
 마지막으로, 데이터 소스, OpenAPI 스키마 및 AWS Lambda 함수 아티팩트를 저장하는 데 사용된 Amazon S3 버킷을 비우고 삭제합니다:
 
 
  ```
-aws s3 rm s3://eks-bedrock-knowledge-base-data-source-${AWS_ACCOUNT}/ \
+aws s3 rm s3://devocean-devocean-bedrock-knowledge-base-data-source-${AWS_ACCOUNT}/ \
  --recursive \
- --region us-east-1
+ --region ap-northeast-1
   
-aws s3 rb s3://eks-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
- --region us-east-1
+aws s3 rb s3://devocean-bedrock-knowledge-base-data-source-${AWS_ACCOUNT} \
+ --region ap-northeast-1
  
-aws s3 rm s3://eks-bedrock-agent-openapi-schema-${AWS_ACCOUNT}/ \
+aws s3 rm s3://devocean-bedrock-agent-openapi-schema-${AWS_ACCOUNT}/ \
  --recursive \
- --region us-east-1
+ --region ap-northeast-1
  
-aws s3 rb s3://eks-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
- --region us-east-1
+aws s3 rb s3://devocean-bedrock-agent-openapi-schema-${AWS_ACCOUNT} \
+ --region ap-northeast-1
  
-aws s3 rm s3://bedrock-agent-lambda-artifacts-${AWS_ACCOUNT}/ \
+aws s3 rm s3://devocean-bedrock-agent-lambda-artifacts-${AWS_ACCOUNT}/ \
  --recursive \
- --region us-east-1
+ --region ap-northeast-1
  
-aws s3 rb s3://bedrock-agent-lambda-artifacts-${AWS_ACCOUNT} \
- --region us-east-1
+aws s3 rb s3://devocean-bedrock-agent-lambda-artifacts-${AWS_ACCOUNT} \
+ --region ap-northeast-1
  ```
 
 ## 결론

@@ -1,16 +1,16 @@
 # CloudFormation Template
 AWSTemplateFormatVersion: 2010-09-09
-Description: Bedrock Agents for EKS 
+Description: DevOcean - Bedrock Agents for EKS 
 Parameters:
   EmbeddingModelARN:
     Type: String
-    Default: arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0
+    Default: arn:aws:bedrock:ap-northeast-1::foundation-model/amazon.titan-embed-text-v1:2:8k
   FoundationModelName: 
     Type: String
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
   FoundationModelARN:
     Type: String
-    Default: arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+    Default: arn:aws:bedrock:ap-northeast-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
   EKSClusterName:
     Type: String
     Default: devocean-agent-eks
@@ -49,14 +49,14 @@ Resources:
             Resource:
               Fn::Join:
                 - ""
-                - - arn:aws:s3:::eks-bedrock-knowledge-base-data-source-
+                - - arn:aws:s3:::devocean-bedrock-knowledge-base-data-source-
                   - Ref: AWS::AccountId
           - Action: s3:GetObject
             Effect: Allow
             Resource:
               Fn::Join:
                 - ""
-                - - arn:aws:s3:::eks-bedrock-knowledge-base-data-source-
+                - - arn:aws:s3:::devocean-bedrock-knowledge-base-data-source-
                   - Ref: AWS::AccountId
                   - /*
           - Action: aoss:APIAccessAll
@@ -222,7 +222,7 @@ Resources:
             Resource:
               Fn::Join:
                 - ""
-                - - "arn:aws:eks:us-east-1:"
+                - - "arn:aws:eks:ap-northeast-1:"
                   - Ref: AWS::AccountId
                   - ":cluster/"
                   - Ref: EKSClusterName
@@ -325,7 +325,7 @@ Resources:
           BucketArn: 
             Fn::Join:
               - ""
-              - - "arn:aws:s3:::eks-bedrock-knowledge-base-data-source-"
+              - - "arn:aws:s3:::devocean-bedrock-knowledge-base-data-source-"
                 - Ref: AWS::AccountId
   # Bedrock Agent IAM Roles
   BedrockAgentRole:
@@ -361,7 +361,7 @@ Resources:
               Fn::Join:
                 - ""
                 - - "arn:aws:s3:::"
-                  - "devocean-agent-openapi-schema-"
+                  - "devocean-bedrock-agent-openapi-schema-"
                   - Ref: AWS::AccountId
                   - "/"
                   - "open-api-schema.json"
