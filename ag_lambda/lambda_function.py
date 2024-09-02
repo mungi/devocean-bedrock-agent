@@ -97,7 +97,7 @@ def lambda_handler(event, context):
     api_path = event["apiPath"]
     httpMethod = event["httpMethod"]
     
-    # 네임스페이스별로 Pod 가져오기
+    # 네임스페이스별 Pod 가져오기
     if api_path.rsplit('/',1)[1] =='get-pods':
       parameters = event["parameters"]
       namespace_name=parameters[0]["value"]
@@ -151,8 +151,8 @@ def lambda_handler(event, context):
         'responseBody': response_body
     }
     
-    session_attributes = event['sessionAttributes']
-    prompt_session_attributes = event['promptSessionAttributes']
+    session_attributes = event.get('sessionAttributes', {})
+    prompt_session_attributes = event.get('promptSessionAttributes', {})
     
     api_response = {
         'messageVersion': '1.0', 
